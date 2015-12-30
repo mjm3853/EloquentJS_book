@@ -1,0 +1,23 @@
+// Run code here in the context of Chapter 4
+
+
+function FourElementTable(topLeft, topRight, bottomLeft, bottomRight) {
+  this.topLeft = topLeft;
+  this.topRight = topRight;
+  this.bottomLeft = bottomLeft;
+  this.bottomRight = bottomRight;
+  this.calculateCorrelation = function correlation() {
+    return (this.bottomRight * this.topLeft - this.bottomLeft * this.topRight)/
+      Math.sqrt((bottomLeft + bottomRight) *
+                (topLeft + topRight) *
+                (topRight + bottomRight) *
+                (topLeft + bottomLeft))
+  }
+};
+
+var table = new FourElementTable(76, 9, 4, 1);
+var table2 = new FourElementTable(4, 23, 93, 12);
+
+console.log(table.calculateCorrelation())
+console.log(table2.calculateCorrelation())
+
