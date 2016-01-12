@@ -157,3 +157,89 @@ function evaluate(expr, env){
 	}
 }
 
+//Global specialForms object
+var specialForms = Object.create(null);
+
+specialForms["if"] = function(args, env){
+	
+	// ensures that 3 arguments are passed to if
+	if (args.length != 3)
+		throw new SyntaxError("Bad number of args to if");
+	
+	//checks the first argument and evalutes if it is not false (true)
+	// if true, evaluates the 2nd argument.
+	// if false, evaluates the, 3rd argument.
+	if (evaluate(args[0], env) !== false)
+		return evaluate(args[1], env);
+	else
+		return evaluate(args[2], env);
+};
+
+specialForms["while"] = function(args, env){
+	if (args.length != 2)
+		throw new SyntaxError("Bad number if args to while");
+	
+	while (evaluate(args[0], env) !== false)
+		evaluate(args[1], env);
+		
+	//Since undefined does not exist, return false
+	return false;
+};
+
+specialForms["do"] = function(args, env){
+	var value = false;
+	args.forEach(function(arg){
+		value = evaluate(arg, env);
+	});
+	return value;
+};
+
+specialForms["define"] = function(args, env){
+	if (args.length !=2 || args[0].type != "word")
+		throw new SyntaxError("Bad use of define");
+	var value = evaluate(args[1], env);
+	env[args[0].name] = value;
+	return value;
+};
+
+//=============================
+
+var topEnv = Object.create(null);
+
+topEnv["true"] = true;
+topEnv["false"] = false;
+
+["+", "-", "*", "/", "==", "<", ">"].forEach(function(op){
+	topEnv[op] = new Function("a", "b", "return a " + op + "b;");
+});
+
+topEnv["print"] = function(value){
+	console.log(value);
+	return value;
+};
+
+console.log(topEnv);
+
+//==============================
+
+var prog = parse("if(true, false, true)");
+
+console.log("Return the output of parsing the if statement: " + JSON.stringify(prog));
+console.log("Expect to return false: " + evaluate(prog, topEnv));
+
+//==============================
+
+function run() {
+	var env = Object.create(topEnv);
+	var program = Array.prototype.slice.call(arguments, 0).join("\n");
+	return evaluate(parse(program), env);
+}
+
+//===========================
+
+run("do(define(total, 0),",
+	"   define(count, 1),",
+	"   while(<(count,11),",
+	"         do(define(total, +(total, count)),",
+	"            define(count, +(count, 1)))),",
+	"   print(total))");
