@@ -157,6 +157,8 @@ function evaluate(expr, env){
 	}
 }
 
+//=============================================
+
 //Global specialForms object
 var specialForms = Object.create(null);
 
@@ -243,3 +245,82 @@ run("do(define(total, 0),",
 	"         do(define(total, +(total, count)),",
 	"            define(count, +(count, 1)))),",
 	"   print(total))");
+
+//===========================
+
+specialForms["fun"] = function(args, env){
+	
+	//checks that there are arguments for the function
+	if (!args.length)
+		throw new SyntaxError("Functions need a body");
+		
+	//The name function takes the argument expr
+	// Ensures that the expr type is a word, and if yes, returns the expr's 'name' value
+	function name(expr) {
+		if (expr.type != "word")
+			throw new SyntaxError("Arg names must be words");
+		return expr.name;
+	}
+	
+	//The argNames variable creates a new array with all the name values for the args except the last one in the original array. 
+	var argNames = args.slice(0, args.length - 1).map(name);
+	
+	//The body variable gets the value of the item at the end of the array.
+	var body = args[args.length -1];
+	
+	return function(){
+		//makes sure that the number of arguments is correct.
+		if (arguments.length != argNames.length)
+			throw new TypeError("Wrong number of arguments");
+		
+		//Creates a local environment object from the env argument passed in to the fun specialForm
+		var localEnv = Object.create(env);
+		
+		//For all the args, adds them to the local environment.
+		for (var i = 0; i < arguments.length; i++)
+			localEnv[argNames[i]] = arguments[i];
+		
+		//Evaluates the function based on the body and local environment.
+		return evaluate(body, localEnv);
+	};
+};
+
+//===============================
+
+run("do(define(plusOne, fun(a, +(a, 1))),",
+    "   print(plusOne(10)))");
+    
+run("do(define(pow, fun(base, exp,",
+    "     if(==(exp, 0),",
+    "       1,",
+    "       *(base, pow(base, -(exp,1)))))),",
+    "   print(pow(2, 10)))");
+    
+//===============================
+
+topEnv["array"] = function(){
+	return Array.prototype.slice.call(arguments, 0);
+};
+
+//===============================
+
+topEnv["length"] = function(array){
+	return array.length;
+};
+
+//===============================
+
+topEnv["element"] = function(array, i){
+	return array[i];
+};
+
+//==============================
+
+run("do(define(sum, fun(array,",
+    "     do(define(i, 0),",
+    "        define(sum, 0),",
+    "        while(<(i, length(array)),",
+    "          do(define(sum, +(sum, element(array, i))),",
+    "             define(i, +(i, 1)))),",
+    "        sum))),",
+    "   print(sum(array(1, 2, 3))))");
