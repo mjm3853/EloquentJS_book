@@ -51,11 +51,25 @@ console.log("Parse the Word expression 'abc': " + JSON.stringify(parseExpression
 
 //===================
 // Slicing the 'first' variable removes all characters that come before that 'first' value  
+//  When you want to know whether a pattern is found and also its index in a string use search() 
+//  So first becomes either -1 if there is no white space.
+//  Or it becomes the index of \S.
+
+// function skipSpace(string) {
+//   var first = string.search(/\S/);
+//   if (first == -1) return "";
+//  return string.slice(first);
+// }
+
+//===================
 
 function skipSpace(string) {
-  var first = string.search(/\S/);
-  if (first == -1) return "";
-  return string.slice(first);
+	
+  //Creates a skippable variable that is either white space or a comment
+  var skippable = string.match(/^(\s|#.*)*/);
+  
+  //slices to take anything after the skippable part
+  return string.slice(skippable[0].length);
 }
 
 //===================
@@ -324,3 +338,36 @@ run("do(define(sum, fun(array,",
     "             define(i, +(i, 1)))),",
     "        sum))),",
     "   print(sum(array(1, 2, 3))))");
+    
+//===============================
+
+specialForms["set"] = function(args, env) {
+	
+  //Throws an error if there are not 2 args or the first arg type is not word
+  if (args.length != 2 || args[0].type != "word")
+    throw new SyntaxError("Bad use of set");
+  
+  //sets the variable name as the name value of the first argument
+  var varName = args[0].name;
+  
+  //evaluates the second argument with the environment
+  var value = evaluate(args[1], env);
+
+  //wtf
+  for (var scope = env; scope; scope = Object.getPrototypeOf(scope)) {
+    if (Object.prototype.hasOwnProperty.call(scope, varName)) {
+      scope[varName] = value;
+      return value;
+    }
+  }
+  throw new ReferenceError("Setting undefined variable " + varName);
+};
+
+//==================================
+
+run("do(define(x, 4),",
+    "   define(setx, fun(val, set(x, val))),",
+    "   setx(50),",
+    "   print(x))");
+// → 50
+run("set(quux, true)");
