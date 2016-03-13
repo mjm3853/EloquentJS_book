@@ -12,3 +12,21 @@ function talksAbout(node, string){
 }
 
 console.log(talksAbout(document.body, "Blah"));
+
+//---------------
+
+var link = document.body.getElementsByTagName("a")[0];
+
+console.log(link.href);
+
+//---------------
+
+var ostrich = document.getElementById("gertrude");
+
+console.log(ostrich.src);
+
+//----------------
+
+var paragraphs = document.body.getElementsByTagName("p");
+
+document.body.insertBefore(paragraphs[1], paragraphs[0]);
