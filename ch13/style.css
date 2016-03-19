@@ -1,1 +1,10 @@
-#glassCase { border: 3px solid blue}
+#glassCase { 
+	border: 3px solid blue;
+	}
+
+strong {
+	color: green; 
+	font-style: oblique;
+	}
+	
+
