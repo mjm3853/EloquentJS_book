@@ -33,8 +33,30 @@ document.body.insertBefore(paragraphs[1], paragraphs[0]);
 
 //-----------------
 
-function replaceImages(){
-	var images =document.body.getElementsByTagName("img");
+var button = document.getElementById("bostrichButton");
 
-	
+function replaceImages(){
+	var images = document.body.getElementsByTagName("img");
+		
+	for (var i = images.length - 1; i >= 0; i--){
+		var image = images[i];
+		if (image.alt){
+			var text = document.createTextNode(image.alt);
+			image.parentNode.replaceChild(text, image);
+		}
+	}
 }
+
+function disableButton(){
+	button.disabled = true;
+}
+
+button.addEventListener("click", replaceImages, false);
+button.addEventListener("click", disableButton, false);
+
+//-------------------
+
+
+
+
+
