@@ -126,3 +126,11 @@ function highlightAllCode() {
 highlightAllCode();
 
 //-------------------------
+
+var firstParagraph = document.body.getElementsByTagName("p")[0];
+
+console.log("First Paragraph has the text: '" + firstParagraph.textContent + "'");
+console.log("clientHeight:", firstParagraph.clientHeight);
+console.log("offsetHeight:", firstParagraph.offsetHeight);
+
+//------------------------
