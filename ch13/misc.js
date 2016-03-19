@@ -30,3 +30,11 @@ console.log(ostrich.src);
 var paragraphs = document.body.getElementsByTagName("p");
 
 document.body.insertBefore(paragraphs[1], paragraphs[0]);
+
+//-----------------
+
+function replaceImages(){
+	var images =document.body.getElementsByTagName("img");
+
+	
+}
