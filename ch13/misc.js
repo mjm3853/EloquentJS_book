@@ -44,7 +44,7 @@ function replaceImages(){
 		
 	for (var i = images.length - 1; i >= 0; i--){
 		var image = images[i];
-		if (image.alt){
+		if (image.alt == "Bostrich"){
 			var text = document.createTextNode(image.alt);
 			image.parentNode.replaceChild(text, image);
 		}
@@ -143,14 +143,29 @@ function time (name, action) {
 
 time("naive", function(){
 	var target = document.getElementById("one");
-	while (target.offsetWidth < 2000)
+	while (target.offsetWidth < 200)
 		target.appendChild(document.createTextNode("X"));
 });
 
 time("clever", function(){
 	var target = document.getElementById("two");
 	target.appendChild(document.createTextNode("XXXXX"));
-	var total = Math.ceil(2000 / (target.offsetWidth / 5));
+	var total = Math.ceil(200 / (target.offsetWidth / 5));
 	for (var i = 5; i < total; i++)
 		target.appendChild(document.createTextNode("X"));
 });
+
+//-------------------------
+
+var dog = document.querySelector("#dog");
+var angle = 0, lastTime = null;
+
+function animate(time) {
+	if (lastTime != null)
+		angle += (time - lastTime) * 0.001;
+	lastTime = time;
+	dog.style.top = (Math.sin(angle) * 20) + "px";
+	dog.style.left = (Math.sin(angle) * 200) + "px";
+	requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
