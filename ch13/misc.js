@@ -169,3 +169,7 @@ function animate(time) {
 	requestAnimationFrame(animate);
 }
 requestAnimationFrame(animate);
+
+//----------------
+
+// @TODO Exercises at the end of the chapter.
