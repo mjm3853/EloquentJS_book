@@ -82,9 +82,38 @@ rect.addEventListener("mousedown", function(event){
 	}
 });
 
-function butttonPressed(event) {
+function buttonPressed(event) {
 	if (event.buttons == null)
 		return event.which != 0;
 	else
 		return event.buttons !=0;
 }
+
+function moved(event) {
+	if (!buttonPressed(event)){
+		removeEventListener("mousemove", moved);
+	} else {
+		var dist = event.pageX - lastX;
+		var newWidth = Math.max(10, rect.offsetWidth + dist);
+		rect.style.width = newWidth + "px";
+	}
+}
+
+//--------------------------
+
+var hoverPara = document.querySelector("#hoverPara");
+
+function isInside(node, target){
+	for (; node != null; node = node.parentNode)
+		if (node == target) return true;
+}
+
+hoverPara.addEventListener("mouseover", function(event){
+	if (!isInside(event.relatedTarget, hoverPara))
+		hoverPara.style.color = "red";
+});
+
+hoverPara.addEventListener("mouseout", function(event){
+	if (!isInside(event.relatedTarget, hoverPara))
+		hoverPara.style.color = "";
+});
