@@ -141,3 +141,21 @@ for (var i=0; i < fields.length; i++){
 		help.textContent = "";
 	});
 }
+
+//------------------------------------------
+
+var squareWorker = new Worker("code/squareWorker.js");
+squareWorker.addEventListener("message", function(event){
+	console.log("The worker responded:", event.data);
+});
+
+squareWorker.postMessage(10);
+squareWorker.postMessage(24);
+
+//------------------------------
+
+document.body.style.background = "blue";
+
+setTimeout(function(){
+	document.body.style.background = "yellow";
+}, 2000);
