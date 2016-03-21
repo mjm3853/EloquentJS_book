@@ -159,3 +159,36 @@ document.body.style.background = "blue";
 setTimeout(function(){
 	document.body.style.background = "yellow";
 }, 2000);
+
+//----------------------------
+
+var textArea = document.querySelector("textarea");
+var timeout;
+
+textArea.addEventListener("keydown", function(){
+	clearTimeout(timeout);
+	timeout = setTimeout(function(){
+		console.log("You stopped typing.");
+	},500);
+});
+
+//-----------------------------
+
+function displayCoords(event){
+	console.log("Mouse at " + event.pageX + ", " + event.pageY);
+}
+
+var scheduled = false, lastEvent;
+
+addEventListener("mousemove", function(event){
+	lastEvent = event;
+	if (!scheduled){
+		scheduled = true;
+		setTimeout(function(){
+			scheduled = false;
+			displayCoords(lastEvent);
+		}, 250);
+	}
+});
+
+// @TODO Chapter 14 Exercises 
