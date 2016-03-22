@@ -54,7 +54,7 @@ function Vector(x,y){
 	this.y = y;
 }
 
-Vector.prototype.plus - function(other){
+Vector.prototype.plus = function(other){
 	return new Vector(this.x + other.x, this.y + other.y);
 };
 
@@ -98,3 +98,19 @@ function Lava(pos, ch){
 }
 
 Lava.prototype.type = "Lava";
+
+//-----------------------------------------------
+
+function Coin(pos){
+	this.basePos = this.pos = pos.plus(new Vector(0.2,0.2));
+	this.size = new Vector(0.6,0.6);
+	this.wobble = Math.random() * Math.PI * 2;
+}
+
+Coin.prototype.type = "Coin";
+
+//----------------------------------------------
+
+var simpleLevel = new Level(simpleLevelPlan);
+
+console.log(simpleLevel.width, "by", simpleLevel.height);
