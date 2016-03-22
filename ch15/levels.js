@@ -82,6 +82,10 @@ function Player(pos){
 
 Player.prototype.type = "player";
 
+var testPlayer = new Player(new Vector(3,3));
+
+console.log("Test Player with object details:", testPlayer);
+
 //----------------------------------------
 
 function Lava(pos, ch){
@@ -99,6 +103,10 @@ function Lava(pos, ch){
 
 Lava.prototype.type = "Lava";
 
+var testLava = new Lava(new Vector(5,5), "|");
+
+console.log("Test Lava with object details:", testLava);
+
 //-----------------------------------------------
 
 function Coin(pos){
@@ -109,8 +117,51 @@ function Coin(pos){
 
 Coin.prototype.type = "Coin";
 
+var testCoin = new Coin(new Vector(5,5));
+
+console.log("Test Coin with object details:", testCoin);
+
 //----------------------------------------------
 
 var simpleLevel = new Level(simpleLevelPlan);
 
-console.log(simpleLevel.width, "by", simpleLevel.height);
+console.log("Test to show the width and height of the simpleLevel:", simpleLevel.width, "by", simpleLevel.height);
+
+//------------------------------------------------
+
+function elt(name,className){
+	var elt = document.createElement(name);
+	if (className) 
+		elt.className = className;
+	return elt;
+}
+
+console.log("Test to create an element with a class:", elt("testElement", "testClassName"));
+
+//------------------------------------------
+
+function DOMDisplay(parent,level){
+	this.wrap = parent.appendChild(elt("div", "game"));
+	this.level = level;
+	
+	this.wrap.appendChild(this.drawBackground());
+	this.actorLayer = null;
+	this.drawFrame();
+}
+
+var scale = 20;
+
+DOMDisplay.prototype.drawBackground = function(){
+	var table = elt("table","background");
+	table.style.width = this.level.width * scale + "px";
+	this.level.grid.forEach(function(row){
+		var rowElt = table.appendChild(elt("tr"));
+		rowElt.style.height = scale + "px";
+		row.forEach(function(type){
+			rowElt.appendChild(elt("td", "style"));
+		});
+	});
+	return table;
+};
+
+
