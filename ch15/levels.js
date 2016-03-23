@@ -258,3 +258,56 @@ Level.prototype.actorAt = function(actor){
 };
 
 //------------------------------------------
+
+var maxStep = 0.05;
+
+Level.prototype.animate = function(step, keys){
+	if (this.status != null)
+		this.finishDelay -= step;
+		
+	while (step > 0) {
+		var thisStep = Main.min(step, maxStep);
+		this.actors.forEach(function(actor){
+			actor.act(thisStep, this, keys);
+		}, this);
+		
+		step -= thisStep;
+	}
+};
+
+//-------------------------------------------
+
+Lava.prototype.act = function(step,level){
+	var newPos = this.pos.plus(this.speed.times(step));
+	if (!level.obstacleAt(newPos, this.size))
+		this.pos = newPos;
+	else if (this.repeatPos)
+		this.pos = this.repeatPos;
+	else
+		this.speed = this.speed.times(-1);
+};
+
+
+//------------------------------------
+
+var wobbleSpeed = 8, wobbleDist = 0.07;
+
+Coin.prototype.act = function(step){
+	this.wobble += step * wobbleSpeed;
+	var wobblePos = Math.sin(this.wobble) * wobbleDist;
+	this.pos = this.basePos.plus(new Vector(0, wobblePos));
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
