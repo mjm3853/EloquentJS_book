@@ -457,12 +457,13 @@ function runGame(plans, Display){
 	startLevel(0);
 }
 
+//-----------------------------------------------
+
 function displayLives(number){
 	var livesPara = document.getElementById("livesDisplay");
 		
 	livesPara.textContent = ("Lives = " + number); 
 }
-
 
 //--------------------------
 
@@ -470,7 +471,7 @@ var GAME_LEVELS = [
   ["                                                                                ",
    "                                                                                ",
    "                                                                                ",
-   "                                                                                ",
+   "                                                                   o            ",
    "                                                                                ",
    "                                                                                ",
    "                                                                  xxx           ",
