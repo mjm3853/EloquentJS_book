@@ -429,18 +429,19 @@ function runLevel(level, Display, andThen) {
 var startLives = 3;
 
 function runGame(plans, Display){
-	console.log("Starting Lives =", startLives);
 	var lives = startLives; 
+	displayLives(lives);
 	
 	function startLevel(n) {
 		
 		runLevel(new Level(plans[n]), Display, function(status){
 			if (status == "lost"){
 				lives = lives - 1;
-				alert("You lost a life. Current lives = " + lives);
+				displayLives(lives);
 				if (lives <= 0) {
 					startLevel(0);
 					lives = startLives;
+					displayLives(lives);
 					alert("Game Over! Try again. Starting Lives = " + lives);
 				} 
 				else 
@@ -454,6 +455,12 @@ function runGame(plans, Display){
 		});
 	}
 	startLevel(0);
+}
+
+function displayLives(number){
+	var livesPara = document.getElementById("livesDisplay");
+		
+	livesPara.textContent = ("Lives = " + number); 
 }
 
 
