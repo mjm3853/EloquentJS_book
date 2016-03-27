@@ -426,22 +426,22 @@ function runLevel(level, Display, andThen) {
 
 //-----------------------------------------
 
-var lives = 3;
+var startLives = 3;
 
 function runGame(plans, Display){
-	
-	console.log("Starting Lives =", lives);
+	console.log("Starting Lives =", startLives);
+	var lives = startLives; 
 	
 	function startLevel(n) {
 		
 		runLevel(new Level(plans[n]), Display, function(status){
 			if (status == "lost"){
 				lives = lives - 1;
-				console.log("You lost a life. Current lives =", lives);
+				alert("You lost a life. Current lives = " + lives);
 				if (lives <= 0) {
-					console.log("Game Over! Try again.");
 					startLevel(0);
-					lives = 3;
+					lives = startLives;
+					alert("Game Over! Try again. Starting Lives = " + lives);
 				} 
 				else 
 					startLevel(n); 
