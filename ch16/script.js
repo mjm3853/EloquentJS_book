@@ -55,3 +55,9 @@ cx.stroke();
 End Hide
 */
 
+cx.beginPath();
+//Parts of a line hook: center=(50,50) radius=40 angle=0 to 7
+cx.arc(50,50,40,0,7);
+//Parts a circle: center=(150,50) radius=40 angle=0 to 0.5 * PI
+cx.arc(150,50,40,0,0.5 * Math.PI);
+cx.stroke();
