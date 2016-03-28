@@ -62,7 +62,7 @@ cx.stroke();
 End Hide
 */
 
-//Draw a Pie Chart
+//Draw a Pie Chart with labels
 var results = [
 	{name: "Satisfied", count: 1043, color: "lightblue"},
 	{name: "Neutral", count: 563, color: "lightgreen"},
@@ -74,16 +74,25 @@ var total = results.reduce(function(sum,choice){
 	return sum + choice.count;
 },0);
 
-//Start at the top
+//Start at the top of the circle
 var currentAngle = -0.5 * Math.PI;
 results.forEach(function(result){
 	var sliceAngle = (result.count / total) * 2 * Math.PI;
 	cx.beginPath();
 	//Circle details: center=(100,100) radius=100
 	//from current angle, clockwise by slice's angle
-	cx.arc(100,100,100,currentAngle, currentAngle + sliceAngle);
+	cx.arc(200,100,100,currentAngle, currentAngle + sliceAngle);
 	currentAngle += sliceAngle;
-	cx.lineTo(100,100);
+	cx.lineTo(200,100);
 	cx.fillStyle = result.color;
 	cx.fill();
 });
+
+cx.font = "14px Georgia";
+cx.fillStyle = "fuchsia";
+cx.fillText(results[0].name, 280, 50);
+cx.fillText(results[1].name, 120, 200);
+cx.fillText(results[2].name, 28, 75);
+cx.fillText(results[3].name, 80, 12);
+
+
