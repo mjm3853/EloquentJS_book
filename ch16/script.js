@@ -100,9 +100,7 @@ img.addEventListener("load", function(){
 		cx.drawImage(img, x, 10);
 });
 
-End Hide
-*/
-
+//animate running character - sprite
 var img = document.createElement("img");
 img.src = "img/player.png";
 var spriteW = 24, spriteH = 30;
@@ -119,3 +117,13 @@ img.addEventListener("load", function(){
 		console.log(cycle);
 	}, 120);
 });
+
+End Hide
+*/
+
+//draw oval using scale transformation
+cx.scale(3, .5);
+cx.beginPath();
+cx.arc(50,50,40,0,7);
+cx.lineWidth = 3;
+cx.stroke();
