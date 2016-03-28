@@ -42,5 +42,16 @@ cx.lineTo(10,10);
 cx.closePath();
 cx.stroke();
 
+//draw arcs
+cx.beginPath();
+cx.moveTo(10,10);
+//Parts of an arc: control=(90,10) goal=(90,90) radius=20
+cx.arcTo(90,10,90,90,20);
+cx.moveTo(10,10);
+//Parts of an arc 2: control=(90,10) goal=(90,90) radius=80
+cx.arcTo(90,10,90,90,80);
+cx.stroke();
+
 End Hide
 */
+
