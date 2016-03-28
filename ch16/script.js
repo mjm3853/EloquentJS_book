@@ -52,12 +52,38 @@ cx.moveTo(10,10);
 cx.arcTo(90,10,90,90,80);
 cx.stroke();
 
-End Hide
-*/
-
 cx.beginPath();
 //Parts of a line hook: center=(50,50) radius=40 angle=0 to 7
 cx.arc(50,50,40,0,7);
 //Parts a circle: center=(150,50) radius=40 angle=0 to 0.5 * PI
 cx.arc(150,50,40,0,0.5 * Math.PI);
 cx.stroke();
+
+End Hide
+*/
+
+//Draw a Pie Chart
+var results = [
+	{name: "Satisfied", count: 1043, color: "lightblue"},
+	{name: "Neutral", count: 563, color: "lightgreen"},
+	{name: "Unsatisfied", count: 510, color: "pink"},
+	{name: "No Comment", count: 175, color: "silver"}
+];
+
+var total = results.reduce(function(sum,choice){
+	return sum + choice.count;
+},0);
+
+//Start at the top
+var currentAngle = -0.5 * Math.PI;
+results.forEach(function(result){
+	var sliceAngle = (result.count / total) * 2 * Math.PI;
+	cx.beginPath();
+	//Circle details: center=(100,100) radius=100
+	//from current angle, clockwise by slice's angle
+	cx.arc(100,100,100,currentAngle, currentAngle + sliceAngle);
+	currentAngle += sliceAngle;
+	cx.lineTo(100,100);
+	cx.fillStyle = result.color;
+	cx.fill();
+});
