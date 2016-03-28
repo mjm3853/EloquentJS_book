@@ -59,9 +59,6 @@ cx.arc(50,50,40,0,7);
 cx.arc(150,50,40,0,0.5 * Math.PI);
 cx.stroke();
 
-End Hide
-*/
-
 //Draw a Pie Chart with labels
 var results = [
 	{name: "Satisfied", count: 1043, color: "lightblue"},
@@ -95,4 +92,30 @@ cx.fillText(results[1].name, 120, 200);
 cx.fillText(results[2].name, 28, 75);
 cx.fillText(results[3].name, 80, 12);
 
+//draw an image dashing to the right
+var img = document.createElement("img");
+img.src = "img/dog.png";
+img.addEventListener("load", function(){
+	for (var x=10; x<200; x+=30)
+		cx.drawImage(img, x, 10);
+});
 
+End Hide
+*/
+
+var img = document.createElement("img");
+img.src = "img/player.png";
+var spriteW = 24, spriteH = 30;
+img.addEventListener("load", function(){
+	var cycle = 0;
+	setInterval(function() {
+		cx.clearRect(0,0,spriteW,spriteH);
+		cx.drawImage(img,
+			//source rectangle
+			cycle * spriteW, 0, spriteW, spriteH,
+			//destination rectangle
+			0, 0, spriteW, spriteH);
+		cycle = (cycle + 1) % 8;
+		console.log(cycle);
+	}, 120);
+});
