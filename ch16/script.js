@@ -8,6 +8,8 @@ cx.strokeRect(5,5,50,50);
 cx.lineWidth = 5;
 cx.strokeRect(135,5,50,50);
 
+//--------------------------------------
+
 //draw some lines
 cx.beginPath();
 for (var y=70; y <130; y += 10){
@@ -16,12 +18,16 @@ for (var y=70; y <130; y += 10){
 }
 cx.stroke();
 
+//-------------------------------------
+
 //draw triangle
 cx.beginPath();
 cx.moveTo(50,10);
 cx.lineTo(10,70);
 cx.lineTo(90,70);
 cx.fill();
+
+//-------------------------------------------
 
 //draw star trek type symbol
 cx.beginPath();
@@ -31,6 +37,8 @@ cx.quadraticCurveTo(60,10,90,90);
 cx.lineTo(60,10);
 cx.closePath();
 cx.stroke();
+
+//-----------------------------------------------
 
 //draw pointy pants
 cx.beginPath();
@@ -42,6 +50,8 @@ cx.lineTo(10,10);
 cx.closePath();
 cx.stroke();
 
+//----------------------------------------------
+
 //draw arcs
 cx.beginPath();
 cx.moveTo(10,10);
@@ -52,12 +62,17 @@ cx.moveTo(10,10);
 cx.arcTo(90,10,90,90,80);
 cx.stroke();
 
+//-----------------------------------------------------
+
+//draw a circle with a hook
 cx.beginPath();
 //Parts of a line hook: center=(50,50) radius=40 angle=0 to 7
 cx.arc(50,50,40,0,7);
 //Parts a circle: center=(150,50) radius=40 angle=0 to 0.5 * PI
 cx.arc(150,50,40,0,0.5 * Math.PI);
 cx.stroke();
+
+//----------------------------------------------------
 
 //Draw a Pie Chart with labels
 var results = [
@@ -92,6 +107,8 @@ cx.fillText(results[1].name, 120, 200);
 cx.fillText(results[2].name, 28, 75);
 cx.fillText(results[3].name, 80, 12);
 
+//-------------------------------------------------
+
 //draw an image dashing to the right
 var img = document.createElement("img");
 img.src = "img/dog.png";
@@ -99,6 +116,8 @@ img.addEventListener("load", function(){
 	for (var x=10; x<200; x+=30)
 		cx.drawImage(img, x, 10);
 });
+
+//---------------------------------------------------
 
 //animate running character - sprite
 var img = document.createElement("img");
@@ -118,8 +137,7 @@ img.addEventListener("load", function(){
 	}, 120);
 });
 
-End Hide
-*/
+//------------------------------------------------
 
 //draw oval using scale transformation
 cx.scale(3, .5);
@@ -127,3 +145,39 @@ cx.beginPath();
 cx.arc(50,50,40,0,7);
 cx.lineWidth = 3;
 cx.stroke();
+
+//--------------------------------------
+
+//Flip horizontally
+function flipHorizontally(context, around){
+	context.translate(around, 0);
+	context.scale(-1, 1);
+	context.translate(-around, 0);
+}
+
+//flip the sprite player horizontally
+var img = document.createElement("img");
+img.src = "img/player.png";
+var spriteW = 24, spriteH = 30;
+img.addEventListener("load", function(){
+	flipHorizontally(cx, 100 + spriteW/2);
+	cx.drawImage(img,0,0,spriteW,spriteH,100,0,spriteW,spriteH);
+});
+
+End Hide
+*/
+
+function branch(length, angle, scale){
+	cx.fillRect(0,0,1,length);
+	if (length < 8) return;
+	cx.save();
+	cx.translate(0, length);
+	cx.rotate(-angle);
+	branch(length * scale, angle, scale);
+	cx.rotate(2 * angle);
+	branch(length * scale, angle, scale);
+	cx.restore();
+}
+
+cx.translate(200,50);
+branch(60,0.5,0.8);
