@@ -672,3 +672,26 @@ CanvasDisplay.prototype.clearDisplay = function(){
 		this.cx.fillStyle = "rgb(52,166,251)";
 	this.cx.fillRect(0,0,this.canvas.width, this.canvas.height);
 };
+
+var otherSprites = document.createElement("img");
+otherSprites.src = "img/sprites.png";
+
+CanvasDisplay.prototype.drawBackground = function() {
+	var view = this.viewPort;
+	var xStart = Math.floor(view.left);
+	var xEnd = Math.ceil(view.left + view.width);
+	var yStart = Math.floor(view.top);
+	var yEnd = Math.ceil(view.top + view.height);
+	
+	for (var y = yStart; y < yEnd; y++){
+		for (var x = xStart; x < xEnd; x++) {
+			var tile = this.level.grid[y][x];
+			if (tile == null) continue;
+			var screenX = (x - view.left) * scale;
+			var screenY = (y - view.top) * scale;
+			var tileX = tile == "lava" ? scale : 0;
+			this.cx.drawImage(otherSprites, tileX, 0, scale, scale, screenX, screenY, scale, scale);
+		}
+	}
+};
+
