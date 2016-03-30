@@ -140,6 +140,8 @@ console.log("Test to create an element with a class:", elt("testElement", "testC
 
 //------------------------------------------
 
+var scale = 20;
+
 function DOMDisplay(parent,level){
 	this.wrap = parent.appendChild(elt("div", "game"));
 	this.level = level;
@@ -148,8 +150,6 @@ function DOMDisplay(parent,level){
 	this.actorLayer = null;
 	this.drawFrame();
 }
-
-var scale = 20;
 
 DOMDisplay.prototype.drawBackground = function(){
 	var table = elt("table","background");
@@ -608,10 +608,6 @@ var GAME_LEVELS = [
 if (typeof module != "undefined" && module.exports)
   module.exports = GAME_LEVELS;
 
-//-----------------------------
-
-runGame(GAME_LEVELS, DOMDisplay);
-
 //----------------------------------------
 
 function CanvasDisplay(parent,level){
@@ -625,7 +621,7 @@ function CanvasDisplay(parent,level){
 	this.animationTime = 0;
 	this.flipPlayer = false;
 	
-	this.viewPort = {
+	this.viewport = {
 		left: 0,
 		top: 0,
 		width: this.canvas.width / scale,
@@ -649,7 +645,7 @@ CanvasDisplay.prototype.drawFrame = function(step){
 };
 
 CanvasDisplay.prototype.updateViewport = function(){
-	var view = this.viewPort, margin = view.width/3;
+	var view = this.viewport, margin = view.width/3;
 	var player = this.level.player;
 	var center = player.pos.plus(player.size.times(0.5));
 	
@@ -677,7 +673,7 @@ var otherSprites = document.createElement("img");
 otherSprites.src = "img/sprites.png";
 
 CanvasDisplay.prototype.drawBackground = function() {
-	var view = this.viewPort;
+	var view = this.viewport;
 	var xStart = Math.floor(view.left);
 	var xEnd = Math.ceil(view.left + view.width);
 	var yStart = Math.floor(view.top);
@@ -694,4 +690,55 @@ CanvasDisplay.prototype.drawBackground = function() {
 		}
 	}
 };
+
+var playerSprites = document.createElement("img");
+playerSprites.src = "img/player.png";
+var playerXOverlap = 4;
+
+CanvasDisplay.prototype.drawPlayer = function(x, y, width, height){
+	var sprite = 8, player = this.level.player;
+	width += playerXOverlap * 2;
+	x -= playerXOverlap;
+	if (player.speed.x != 0)
+		this.flipPlayer = player.speed.x < 0;
+		
+	if (player.speed.y != 0)
+		sprite = 9;
+	else if (player.speed.x !=0)
+		sprite = Math.floor(this.animationTime * 12) % 8;
+		
+	this.cx.save();
+	if (this.flipPlayer)
+		flipHorizontally(this.cx, x + width / 2);
+	
+	this.cx.drawImage(playerSprites, sprite * width, 0, width, height, x, y, width, height);
+	
+	this.cx.restore();
+};
+
+//Flip horizontally
+function flipHorizontally(context, around){
+	context.translate(around, 0);
+	context.scale(-1, 1);
+	context.translate(-around, 0);
+}
+
+CanvasDisplay.prototype.drawActors = function() {
+	this.level.actors.forEach(function(actor){
+		var width = actor.size.x * scale;
+		var height = actor.size.y * scale;
+		var x = (actor.pos.x - this.viewport.left) * scale;
+		var y = (actor.pos.y - this.viewport.top) * scale;
+		if (actor.type == "player"){
+			this.drawPlayer(x,y,width,height);
+		} else {
+			var tileX = (actor.type == "coin" ? 2 : 1) * scale;
+			this.cx.drawImage(otherSprites, tileX, 0, width, height, x, y, width, height);
+		}
+	}, this);
+};
+
+//-------------------------
+
+runGame(GAME_LEVELS, CanvasDisplay);
 
