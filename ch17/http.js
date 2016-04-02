@@ -119,6 +119,7 @@ function showMessage(msg){
 	return document.body.appendChild(elt);
 }
 
+/*
 var loading = showMessage("Loading...");
 
 getJSON("example/bert.json").then(function(bert){
@@ -132,3 +133,17 @@ getJSON("example/bert.json").then(function(bert){
 }).then(function(){
 	document.body.removeChild(loading);
 });
+*/
+
+//--------------------------------------------
+
+function getSpecificContent(url, type){
+	var contentReq = new XMLHttpRequest();
+	contentReq.open("GET", url, false);
+	contentReq.setRequestHeader("Accept", type);
+	contentReq.send(null);
+	return contentReq.responseText;
+	console.log("@specContent: " + contentReq.responseText);
+}
+
+showMessage(getSpecificContent("http://eloquentjavascript.net/author", "application/json"));
