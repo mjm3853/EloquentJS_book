@@ -1,6 +1,7 @@
-{"fruits":[
-	{"name": "banana", "color": "yellow"},
-	{"name": "lemon", "color": "yellow"},
-	{"name": "cherry", "color": "red"}
-	
-]}
+{"fruits":
+	{
+	"banana": "yellow", 
+	"lemon": "yellow", 
+	"cherry": "red"
+	}
+}
