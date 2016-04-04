@@ -1,9 +1,50 @@
+var list = document.querySelector("#list");
+
+function addToList(name){
+	var option = document.createElement("option");
+	option.textContent = name;
+	list.appendChild(option);
+}
+
+//Initialize the list from localStorage
+var notes = JSON.parse(localStorage.getItem("notes")) || {"empty list": ""};
+for (var name in notes)
+	if (notes.hasOwnProperty(name))
+		addToList(name);
+
+function saveToStorage(){
+	localStorage.setItem("notes", JSON.stringify(notes));
+}
+
+var current = document.querySelector("#currentnote");
+current.value = notes[list.value];
+
+list.addEventListener("change", function(){
+	current.value = notes[list.value];
+});
+
+current.addEventListener("change", function(){
+	notes[list.value] = current.value;
+	saveToStorage();
+});
+
+function addNote() {
+	var name = prompt("Note name", "");
+	if (!name) return;
+	if (!notes.hasOwnProperty(name)){
+		notes[name] = "";
+		addToList(name);
+		saveToStorage();
+	}
+	list.value = name;
+	current.value = notes[name];
+}
+
 /*
 document.querySelector("input").focus();
 console.log(document.activeElement.tagName);
 document.querySelector("input").blur();
 conosle.log(document.activeElement.tagName);
-*/
 
 var form = document.querySelector("form");
 console.log(form.elements[1].type);
@@ -78,3 +119,25 @@ input.addEventListener("change", function(){
 			console.log("It has type", file.type);
 	}
 });
+
+//---------------------------------------------
+
+function readFile(file){
+	return new Promise(function(succeed, fail){
+		var reader = new FileReader();
+		reader.addEventListener("load", function(){
+			succeed(reader.result);
+		});
+		reader.addEventListener("error", function(){
+			fail(reader.error);
+		});
+		reader.readAsText(file);
+	});
+}
+
+//------------------------------
+
+localStorage.setItem("username", "matt");
+console.log(localStorage.getItem("username"));
+
+*/
