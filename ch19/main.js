@@ -173,4 +173,18 @@ controls.openFile = function(cx){
 
 //------------------------------------------------
 
+controls.openURL = function(cx){
+	var input = elt("input", {type: "text"});
+	var form = elt("form", null,
+					"Open URL: ", input,
+					elt("button", {type: "submit"}, "load"));
+	form.addEventListener("submit", function(event) {
+		event.preventDefault();
+		loadImageURL(cx, form.querySelector("input").value);
+	});
+	return form;
+};
+
+//--------------------------------------------------
+
 createPaint(document.body);
