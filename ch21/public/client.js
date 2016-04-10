@@ -38,7 +38,7 @@ var shownTalks = Object.create(null);
 
 function displayTalks(talks){
 	talks.forEach(function(talk){
-		var shown = shownTalks[talks.title];
+		var shown = shownTalks[talk.title];
 		if (talk.deleted){
 			if(shown){
 				talkDiv.removeChild(shown);
@@ -59,7 +59,7 @@ function displayTalks(talks){
 
 function instantiateTemplate(name, values){
 	function instantiateText(text) {
-		return text.replace(/\{\{(\w+)\}\}/g, function(_, name){
+		return text.replace(/\{\{(\w+)\}\}/g, function(_, name) {
 			return values[name];
 		});
 	}
@@ -71,6 +71,8 @@ function instantiateTemplate(name, values){
 			return copy;
 		} else if (node.nodeType == document.TEXT_NODE) {
 			return document.createTextNode(instantiateText(node.nodeValue));
+		} else {
+			return node;
 		}
 	}
 	var template = document.querySelector("#template ." + name);
