@@ -82,3 +82,23 @@ router.add("PUT", talksRegEx, function(request, response, title){
 
 //-----------------------------------
 
+router.add("POST", /^\/talks\/([^\/]+)\/comments$/, function(request, response, title){
+	readStreamAsJSON(request, function(error, comment){
+		if (error) {
+			respond(response, 400, error.toString());
+		} else if (!comment || 
+					typeof comment.author != "string",
+					typeof comment.message != "string") {
+			respond(response, 400, "Bad comment data");
+		} else if (title in talks) {
+			talks[title].comments.push(comment);
+			registerChange(title);
+			respond(response, 204, null);
+		} else {
+			respond(response, 404, "No talk '" + title + "' found");
+		}
+	});
+});
+
+//--------------------------------------
+
