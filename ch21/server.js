@@ -149,3 +149,13 @@ function waitForChanges(since, response) {
 }
 
 //----------------------------
+
+var changes = [];
+
+function registerChange(title) {
+	changes.push({title: title, time: Date.now()});
+	waiting.forEach(function(waiter) {
+		sendTalks(getChangedTalks(waiter.since), waiter.response);
+	});
+	waiting = [];
+}
