@@ -25,3 +25,34 @@ request({pathname: "talks"}, function(error, response) {
 		waitForChanges();
 	}
 });
+
+function reportError(error) {
+	if (error)
+		alert(error.toString());
+}
+
+//---------------------------------------
+
+var talkDiv = document.querySelector("#talks");
+var shownTalks = Object.create(null);
+
+function displayTalks(talks){
+	talks.forEach(function(talk){
+		var shown = shownTalks[talks.title];
+		if (talk.deleted){
+			if(shown){
+				talkDiv.removeChild(shown);
+				delete shownTalks[talk.title];
+			}
+		} else {
+			var node = drawTalk(talk);
+			if(shown)
+				talkDiv.replaceChild(node, shown);
+			else
+				talkDiv.append(node);
+			shownTalks[talk.title] = node;
+		}
+	});
+}
+
+//-------------------------------------
