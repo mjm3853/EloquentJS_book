@@ -62,5 +62,23 @@ function readStreamAsJSON(stream, callback){
 //------------------------------------
 
 router.add("PUT", talksRegEx, function(request, response, title){
-	
+	readStreamAsJSON(request, function(error, talk){
+		if (error){
+			respond(response, 400, error.toString());
+		} else if (!talk || 
+					typeof talk.presenter != "string" ||
+					typeof talk.summary != "string"){
+			respond(response, 400, "Bad talk data");
+		} else {
+			talks[title] = {title: title,
+							presenter: talk.presenter,
+							summary: talk.summary,
+							comments: []};
+			registerChange(title);
+			respond(response, 204, null);
+		}
+	});
 });
+
+//-----------------------------------
+
