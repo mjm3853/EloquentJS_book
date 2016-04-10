@@ -102,3 +102,35 @@ router.add("POST", /^\/talks\/([^\/]+)\/comments$/, function(request, response, 
 
 //--------------------------------------
 
+function sendTalks(talks, response){
+	respondJSON(response, 200, {
+		serverTime: Date.now(),
+		talks: talks
+	});
+}
+
+//---------------------------------------------
+
+router.add("GET", /^\/talks$/, function(request, response){
+	var query = require("url").parse(request.url, true).query;
+	if (query.changesSince == null) {
+		var list = [];
+		for (var title in talks)
+			list.push(talks[title]);
+		sendTalks(list, response);
+	} else {
+		var since = Number(query.changesSince);
+		if (isNaN(since)) {
+			respond(response, 400, "Invalid parameter");
+		} else {
+			var changed = getChangedTalks(since);
+			if (changed.length > 0)
+				sendTalks(changed, response);
+			else
+				waitForChanges(since, response);
+		}
+	}
+});
+
+//-----------------------------
+
