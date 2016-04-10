@@ -4,6 +4,7 @@ var ecstatic = require("ecstatic");
 
 var fileServer = ecstatic({root: "./public"});
 var router = new Router();
+var talksRegEx = /^\/talks\/([^\/]+)$/;
 
 http.createServer(function(request, response){
 	if (!router.resolve(request,response))
@@ -25,14 +26,14 @@ function respondJSON(response, status, data){
 
 var talks = Object.create(null);
 
-router.add("GET", /^\/talks\/([^\/]+)$/, function(request, response, title){
+router.add("GET", talksRegEx, function(request, response, title){
 	if (title in talks)
 		respondJSON(response, 200, talks[title]);
 	else
 		respond(response, 404, "No talk '" + title + "' found");
 });
 
-router.add("DELETE", /^\/talks\/([^\/]+)$/, function(request, response, title){
+router.add("DELETE", talksRegEx, function(request, response, title){
 	if (title in talks){
 		delete talks[title];
 		registerChange(title);
@@ -59,3 +60,7 @@ function readStreamAsJSON(stream, callback){
 }
 
 //------------------------------------
+
+router.add("PUT", talksRegEx, function(request, response, title){
+	
+});
