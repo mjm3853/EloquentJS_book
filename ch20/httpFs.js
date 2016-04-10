@@ -19,9 +19,10 @@ http.createServer(function(request,response){
 		respond(405, "Method " + request.method + " not allowed.");
 }).listen(8000);
 
-function urlToPath(url){
-	var path = require("url").parse(url).pathname;
-	return "." + decodeURIComponent(path);
+function urlToPath(url) {
+  var path = require("url").parse(url).pathname;
+  var decoded = decodeURIComponent(path);
+  return "." + decoded.replace(/(\/|\\)\.\.(\/|\\|$)/g, "/");
 }
 
 //-------------------------------------------------
