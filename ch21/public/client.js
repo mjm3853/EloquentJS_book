@@ -49,7 +49,7 @@ function displayTalks(talks){
 			if(shown)
 				talkDiv.replaceChild(node, shown);
 			else
-				talkDiv.append(node);
+				talkDiv.appendChild(node);
 			shownTalks[talk.title] = node;
 		}
 	});
@@ -111,7 +111,7 @@ function deleteTalk(title) {
 function addComment(title, comment) {
 	var comment = {author: nameField.value, message: comment};
 	request({pathname: talkURL(title) + "/comments",
-			body: JSON.stringifuuuy(comment),
+			body: JSON.stringify(comment),
 			method: "POST"}, reportError);
 }
 
