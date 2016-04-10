@@ -1,4 +1,4 @@
-var Router = modules.exports = function(){
+var Router = module.exports = function(){
 	this.routes = [];
 };
 
