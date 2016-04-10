@@ -97,3 +97,43 @@ function drawTalk(talk){
 	});
 	return node;
 }
+
+//----------------------------------
+
+function talkURL(title) {
+	return "talks/" + encodeURIComponent(title);
+}
+
+function deleteTalk(title) {
+	request({pathname: talkURL(title), method: "DELETE"}, reportError);
+}
+
+function addComment(title, comment) {
+	var comment = {author: nameField.value, message: comment};
+	request({pathname: talkURL(title) + "/comments",
+			body: JSON.stringifuuuy(comment),
+			method: "POST"}, reportError);
+}
+
+var nameField = document.querySelector("#name");
+
+nameField.value = localStorage.getItem("name") || "";
+
+nameField.addEventListener("change", function() {
+	localStorage.setItem("name", nameField.value);
+});
+
+var talkForm = document.querySelector("#newtalk");
+
+talkForm.addEventListener("submit", function(event) {
+	event.preventDefault();
+	request({pathname: talkURL(talkForm.elements.title.value),
+			method: "PUT",
+			body: JSON.stringify({
+			presenter: nameField.value,
+			summary: talkForm.elements.summary.value	
+			})}, reportError);
+	talkForm.reset();
+});
+
+
