@@ -12,3 +12,16 @@ function request(options, callback){
 	});
 	req.send(options.body || null);
 }
+
+var lastServerTime = 0;
+
+request({pathname: "talks"}, function(error, response) {
+	if (error) {
+		reportError(error);
+	} else {
+		response = JSON.parse(response);
+		displayTalks(response.talks);
+		lastServerTime = response.serverTime;
+		waitForChanges();
+	}
+});
