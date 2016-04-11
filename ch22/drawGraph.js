@@ -169,7 +169,7 @@ function forceDirected_forLoop(graph){
 			var forceSize = -1 * repulsionStrength / (distance * distance);
 			if (node.hasEdge(other))
 				forceSize += (distance - springLength) * springStrength;
-			var normalized = apart.times(1/distance);
+			var normalized = apart.times(1 / distance);
 			node.pos = node.pos.plus(normalized.times(forceSize));
 		}
 	}
@@ -181,7 +181,7 @@ function forceDirected_noRepeat(graph){
 	for (var i = 0; i < graph.length; i++) {
 		var node = graph[i];
 		for (var j = i + 1; j < graph.length; j++) {
-			var other = graph[i];
+			var other = graph[j];
 			var apart = other.pos.minus(node.pos);
 			var distance = Math.max(1, apart.length);
 			var forceSize = -1 * repulsionStrength / (distance * distance);
@@ -194,7 +194,68 @@ function forceDirected_noRepeat(graph){
 	}
 }
 
+//--------------------------------------
+
+function forceDirected_novector(graph){
+	for (var i = 0; i < graph.length; i++) {
+		var node = graph[i];
+		for (var j = i + 1; j < graph.length; j++){
+			var other = graph[j];
+			var apartX = other.pos.x - node.pos.x;
+			var apartY = other.pos.y - node.pos.y;
+			var distance = Math.max(1, Math.sqrt(apartX * apartX + apartY * apartY));
+			var forceSize = -repulsionStrength / (distance * distance);
+			if (node.hasEdge(other))
+				forceSize += (distance - springLength) * springStrength;
+			
+			var forceX = apartX * forceSize / distance;
+			var forceY = apartY * forceSize / distance;
+			node.pos.x += forceX; node.pos.y += forceY;
+			other.pos.x -= forceX; other.pos.y -=forceY;
+		}
+	}
+}
+
 //-----------------------------------
+
+function forceDirected_localforce(graph){
+	var forcesX = [], forcesY = [];
+	for (var i = 0; i < graph.length; i++)
+		forcesX[i] = forcesY[i] = 0;
+		
+	for (var i = 0; i < graph.length; i++){
+		var node = graph[i];
+		for (var j = i + 1; j < graph.length; j++){
+			var other = graph[j];
+			var apartX = other.pos.x - node.pos.x;
+			var apartY = other.pos.y - node.pos.y;
+			var distance = Math.max(1, Math.sqrt(apartX * apartX + apartY * apartY));
+			var forceSize = -repulsionStrength / (distance * distance);
+			if (node.hasEdge(other))
+				forceSize += (distance - springLength) * springStrength;
+			
+			var forceX = apartX * forceSize / distance;
+			var forceY = apartY * forceSize / distance;
+			forcesX[i] += forceX; forcesY[i] += forceY;
+			forcesX[j] -= forceX; forcesY[j] -= forceY;
+		}
+	}
+	
+	for (var i = 0; i < graph.length; i++) {
+		graph[i].pos.x += forcesX[i];
+		graph[i].pos.y += forcesY[i];
+	}
+}
+
+//-------------------------------
+
+var mangledGraph = treeGraph(4, 4);
+mangledGraph.forEach(function(node){
+	var letter = Math.floor(Math.random() * 26);
+	node[String.fromCharCode("A".charCodeAt(0) + letter)] = true;
+});
+
+//-------------------------------------
 
 function runLayout(implementation, graph){
 	var totalSteps = 0, time = 0;
@@ -215,4 +276,4 @@ function runLayout(implementation, graph){
 
 //-------------------------
 
-runLayout(forceDirected_noRepeat, treeGraph(4,4));
+runLayout(forceDirected_localforce, mangledGraph);
