@@ -177,6 +177,25 @@ function forceDirected_forLoop(graph){
 
 //-----------------------------------
 
+function forceDirected_noRepeat(graph){
+	for (var i = 0; i < graph.length; i++) {
+		var node = graph[i];
+		for (var j = i + 1; j < graph.length; j++) {
+			var other = graph[i];
+			var apart = other.pos.minus(node.pos);
+			var distance = Math.max(1, apart.length);
+			var forceSize = -1 * repulsionStrength / (distance * distance);
+			if (node.hasEdge(other))
+				forceSize += (distance - springLength) * springStrength;
+			var applied = apart.times(forceSize / distance);
+			node.pos = node.pos.plus(applied);
+			other.pos = other.pos.minus(applied);
+		}
+	}
+}
+
+//-----------------------------------
+
 function runLayout(implementation, graph){
 	var totalSteps = 0, time = 0;
 	function step(){
@@ -196,4 +215,4 @@ function runLayout(implementation, graph){
 
 //-------------------------
 
-runLayout(forceDirected_forLoop, treeGraph(4,4));
+runLayout(forceDirected_noRepeat, treeGraph(4,4));
